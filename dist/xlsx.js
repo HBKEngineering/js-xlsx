@@ -1331,12 +1331,12 @@ function getzipdata(zip, file, safe) {
 	try { return getzipdata(zip, file); } catch(e) { return null; }
 }
 
-var _fs, jszip;
-if(typeof JSZip !== 'undefined') jszip = JSZip;
+var _fs, _jszip;
+if(typeof JSZip !== 'undefined') _jszip = JSZip;
 if (typeof exports !== 'undefined') {
 	if (typeof module !== 'undefined' && module.exports) {
-		if(has_buf && typeof jszip === 'undefined') jszip = require('js'+'zip');
-		if(typeof jszip === 'undefined') jszip = require('./js'+'zip').JSZip;
+		if(has_buf && typeof _jszip === 'undefined') _jszip = require('js'+'zip');
+		if(typeof _jszip === 'undefined') _jszip = require('./js'+'zip').JSZip;
 		_fs = require('f'+'s');
 	}
 }
@@ -11287,6 +11287,7 @@ function write_zip(wb, opts) {
 	}
 	opts.rels = {}; opts.wbrels = {};
 	opts.Strings = []; opts.Strings.Count = 0; opts.Strings.Unique = 0;
+    var jszip = _jszip || window.JSZip;
 	var wbext = opts.bookType == "xlsb" ? "bin" : "xml";
 	var ct = { workbooks: [], sheets: [], calcchains: [], themes: [], styles: [],
 		coreprops: [], extprops: [], custprops: [], strs:[], comments: [], vba: [],
@@ -11367,6 +11368,7 @@ function firstbyte(f,o) {
 }
 
 function read_zip(data, opts) {
+    var jszip = _jszip || window.JSZip;
 	var zip, d = data;
 	var o = opts||{};
 	if(!o.type) o.type = (has_buf && Buffer.isBuffer(data)) ? "buffer" : "base64";
